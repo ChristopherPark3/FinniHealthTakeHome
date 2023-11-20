@@ -1,18 +1,16 @@
 import mongoose, { Schema } from "mongoose";
+import { ConnectOptions } from "mongoose";
+// const MONGODB_URI = `mongodb+srv://ceepeetres:Dothetingman23-@finnicluster.xrymtmg.mongodb.net/`
 
-const MONGODB_URI = `mongodb+srv://chrispark:FinniHealth@finnicluster.xrymtmg.mongodb.net/`
-
-async function connect() {
-  const status = await mongoose.connect(MONGODB_URI);
-}
 mongoose.Promise = global.Promise;
 
 const patientSchema = new Schema({
   firstName: { type: String, required: true },
-  middleName: String,
+  middleName: {type: String, required: false},
   lastName: { type: String, required: true },
   status: { type: String, required: true },
   address: { type: String, required: true },
+  other: {type: Object, required: false}
 });
 
 const Patient =
