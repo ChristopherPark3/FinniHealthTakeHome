@@ -2,18 +2,20 @@
 import { type NextRequest, NextResponse } from "next/server";
 import Patient from "~/app/(models)/patient";
 import mongoose from "mongoose";
-import { connect } from "~/(utils)/connect";
+import { dbConnect, dbDisconnect } from "~/(utils)/connect";
 
 export async function POST(
   req: NextRequest,
 ): Promise<void | NextResponse<unknown>> {
   // Establish connection to MongoDB database
-  await connect("POST");
+  await dbConnect("POST");
 
   const data = await req.json();
 
   try {
     await Patient.create(data);
+    // Disconnect from database
+    await dbDisconnect()
     return NextResponse.json({ message: "Patient created" });
   } catch (error) {
     return NextResponse.json({
@@ -21,11 +23,8 @@ export async function POST(
       details: error.message,
     });
   }
-  // Disconnect from database
-  await mongoose.disconnect();
-  console.log("Disconnected from database");
 }
 
 export async function GET(req: NextRequest) {
-  await connect("GET");
+  await dbConnect("GET");
 }

@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const MONGODB_URI = process.env.MONGODB_URI;
 
-export async function connect(string: string): Promise<void> {
+export async function dbConnect(string: string): Promise<void> {
   let client;
 
   try {
@@ -15,4 +15,10 @@ export async function connect(string: string): Promise<void> {
     });
     return;
   }
+}
+
+export async function dbDisconnect(): Promise<void> {
+  await mongoose.disconnect();
+  console.log("Disconnected from database");
+  return;
 }
