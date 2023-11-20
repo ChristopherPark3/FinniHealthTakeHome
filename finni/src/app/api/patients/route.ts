@@ -2,44 +2,30 @@
 import { type NextRequest, NextResponse } from "next/server";
 import Patient from "~/app/(models)/patient";
 import mongoose from "mongoose";
+import { connect } from "~/(utils)/connect";
 
-// interface NewPatientInterface {
-//   firstName: string;
-//   middleName?: string;
-//   lastName: string;
-//   status: string;
-//   address: string;
-//   [additionalField: string]: string | number | undefined
-// }
-
-// type QueryBody = Record<string, string | number | undefined>;
-
-const MONGODB_URI = `mongodb+srv://chrispark:FinniHealth@finnicluster.xrymtmg.mongodb.net/`
-
-export async function POST(req: NextRequest): Promise<NextResponse<unknown>> {
-  let client;
-
+export async function POST(
+  req: NextRequest,
+): Promise<void | NextResponse<unknown>> {
   // Establish connection to MongoDB database
+  await connect("POST");
+
+  const data = await req.json();
+
   try {
-    client = await mongoose.connect(MONGODB_URI);
-    console.log("Connected to database");
-  } catch (error: unknown) {
-    console.log({
-      message: "There was an error connecting to the database",
+    await Patient.create(data);
+    return NextResponse.json({ message: "Patient created" });
+  } catch (error) {
+    return NextResponse.json({
+      message: "Patient creation failed",
       details: error.message,
     });
   }
+  // Disconnect from database
+  await mongoose.disconnect();
+  console.log("Disconnected from database");
+}
 
-  const data = await req.json();
-  console.log(data)
-  try {
-
-    const action = await Patient.create(data);
-    
-    return NextResponse.json({message: "Patient created", })
-  } catch (error) {
-    return NextResponse.json({message: "Patient creation failed", details: error.message})
-  }
-  
-
+export async function GET(req: NextRequest) {
+  await connect("GET");
 }
