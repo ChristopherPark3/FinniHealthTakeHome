@@ -11,20 +11,51 @@ export async function POST(
   await dbConnect("POST");
 
   const data = await req.json();
+  console.log(data)
 
-  try {
-    await Patient.create(data);
-    // Disconnect from database
-    await dbDisconnect()
-    return NextResponse.json({ message: "Patient created" });
-  } catch (error) {
-    return NextResponse.json({
-      message: "Patient creation failed",
-      details: error.message,
-    });
+  // cases for different types of requests
+  if (data.type === "POST-CreatePatient") {
+    try {
+      await Patient.create(data);
+      // Disconnect from database
+      await dbDisconnect();
+      return NextResponse.json({ message: "Patient created" });
+    } catch (error) {
+      return NextResponse.json({
+        message: "Patient creation failed",
+        details: error.message,
+      });
+    }
+  }
+  if (data.type === "GET-AllPatients") {
+    try {
+      // find all patients
+      const patients = await Patient.find({});
+      return NextResponse.json({
+        message: "Request for all patients successful",
+        data: patients,
+      });
+    } catch (error) {
+      return NextResponse.json({
+        message: "Failed to get all patients",
+        details: error.message,
+      });
+    }
+  }
+  if (data.type === "GET-OnePatient") {
+    try {
+      // find all patients
+      const patient = await Patient.find({firstName: data.firstName});
+      return NextResponse.json({
+        message: "GET request for one patient successful",
+        data: patient,
+      });
+    } catch (error) {
+      return NextResponse.json({
+        message: "Failed to get all users",
+        details: error.message,
+      });
+    }
   }
 }
 
-export async function GET(req: NextRequest) {
-  await dbConnect("GET");
-}
