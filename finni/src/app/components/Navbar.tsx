@@ -1,7 +1,6 @@
 import AddPatientButton from "./AddPatientButton";
 import { useState } from "react";
 
-
 export default function Navbar() {
   const [openModal, setOpenModal] = useState(false)
   return (

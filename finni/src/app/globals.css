@@ -25,3 +25,7 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+
+#Create-Patient-Button:hover {
+  background-color: #4a3a54;
+}
