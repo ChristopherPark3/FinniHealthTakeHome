@@ -24,4 +24,24 @@ Notes:
         - Will have to reload page everytime user wants to go back and view all patients
         - Not necessary to store state in url because the patient data isn't going to be shared via url or at all for that matter
       
+- Opting for NoSQL just because the schema may change as users are able to add fields as they please
+
+Game Plan:
+- Set up backend connection to MongoDB
+- Set up schema for a new entry
+  - Required: First name, last name, DOB, Status (Inquiry, Onboarding, Active, Churned), Address
+  - Optional: Middle name, Additional fields
+- Write API funcitonality
+  - POST API for new patients
+  - GET to get all entries
+  - GET for specific entries
+  - DELETE for specific entries
+  - UPDATE to easily make changes
+- Create frontend 
+  - Main display
+  - Button to add a new entry
+  - Button within each row to open modal for all data
+- Go back and set up SQL DB for user data
+  - Set up tables for individual users
+  - Make sure to set up a key for mongodb data, to ensure connectivity btw user and respective data
 
