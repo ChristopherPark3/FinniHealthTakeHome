@@ -1,3 +1,6 @@
 Request Types:
 
 - POST-CreatePatient
+- GET-AllPatients
+- GET-OnePatient
+- DELETE-OnePatient

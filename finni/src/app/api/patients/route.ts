@@ -52,10 +52,23 @@ export async function POST(
       });
     } catch (error) {
       return NextResponse.json({
-        message: "Failed to get all users",
+        message: "Failed to get patient",
         details: error.message,
       });
     }
+  }
+}
+
+export async function DELETE(req: NextRequest): Promise<void | NextResponse<unknown>> {
+  await dbConnect('DELETE')
+    
+  try {
+
+  } catch (error) {
+    return NextResponse.json({
+      message: "Failed to delete patient",
+      details: error.message,
+    });
   }
 }
 
