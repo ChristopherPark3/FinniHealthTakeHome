@@ -1,6 +1,11 @@
 "use client";
 
-import { type SyntheticEvent, type SetStateAction, useState, Fragment } from "react";
+import {
+  type SyntheticEvent,
+  type SetStateAction,
+  useState,
+  Fragment,
+} from "react";
 import { toast, Toaster } from "sonner";
 import {
   Button,
@@ -202,6 +207,7 @@ export default function AddPatientModal({ isOpen, onClose }: any) {
               form="add-patient-form"
               bgColor="#ED762F"
               onClick={handleSubmit}
+              _hover={{ background: "#4a3a54", color: "white" }}
             >
               Create Patient
             </Button>

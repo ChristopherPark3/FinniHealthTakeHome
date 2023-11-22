@@ -24,13 +24,14 @@ export async function POST(
       return NextResponse.json({
         message: "Patient creation failed",
         details: error.message,
-      });
-    }
+      })
+    } 
   }
   if (data.type === "GET-AllPatients") {
     try {
       // find all patients
       const patients = await Patient.find({});
+      await dbDisconnect();
       return NextResponse.json({
         message: "Request for all patients successful",
         data: patients,
@@ -39,13 +40,14 @@ export async function POST(
       return NextResponse.json({
         message: "Failed to get all patients",
         details: error.message,
-      });
-    }
+      })
+    } 
   }
   if (data.type === "GET-OnePatient") {
     try {
       // find all patients
       const patient = await Patient.find({firstName: data.firstName});
+      await dbDisconnect()
       return NextResponse.json({
         message: "GET request for one patient successful",
         data: patient,

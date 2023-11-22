@@ -14,3 +14,5 @@ export type NewPatientInterface = {
 export type QueryBody = Record<string, string | number | undefined>;
 
 export type ArbitraryField = Record<string, number | string>;
+
+export type CheckboxProp = {field: string, checked: boolean}

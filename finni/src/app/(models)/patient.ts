@@ -1,5 +1,4 @@
 import mongoose, { Schema } from "mongoose";
-import { ConnectOptions } from "mongoose";
 
 mongoose.Promise = global.Promise;
 

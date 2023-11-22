@@ -1,7 +1,7 @@
 import AddPatientButton from "./AddPatientButton";
 import PatientViewToggle from "./PatientViewToggle";
 
-import { Input} from "@chakra-ui/react";
+import { Input } from "@chakra-ui/react";
 
 export default function PatientDisplayNavbar() {
   return (
