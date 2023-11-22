@@ -33,6 +33,7 @@ export default function PatientDisplayTable() {
   const [activeFields, setActiveFields] = useContext(ActiveFieldsContext);
   const [filterParam, setFilterParam] = useContext(PatientFilterContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [currentPatient, setCurrentPatient] = useState({});
 
   // Effect to fetch all patient data on initial render only
   useEffect(() => {
@@ -43,7 +44,8 @@ export default function PatientDisplayTable() {
       );
   }, []);
 
-  const handleFullData = () => {
+  const handleFullData = (idx: number) => {
+    setCurrentPatient({ ...patientData[idx] });
     onOpen();
   };
 
@@ -51,6 +53,7 @@ export default function PatientDisplayTable() {
   const patientsToRender: JSX.Element[] = [];
   if (filterParam === "") {
     patientData.forEach((current, idx) => {
+      console.log(idx, current.firstName);
       patientsToRender.push(
         <Tr key={idx}>
           <Td>{activeFields["First Name"] ? current.firstName : null}</Td>
@@ -58,7 +61,11 @@ export default function PatientDisplayTable() {
           <Td>{activeFields["Last Name"] ? current.lastName : null}</Td>
           <Td>{activeFields["Date of birth"] ? current.DOB : null}</Td>
           <Td>
-              {activeFields["Status"] ? <StatusField currentStatus={current.status}>current.status</StatusField> : null}
+            {activeFields["Status"] ? (
+              <StatusField currentStatus={current.status}>
+                current.status
+              </StatusField>
+            ) : null}
           </Td>
           <Td>
             {activeFields["Address"]
@@ -66,18 +73,8 @@ export default function PatientDisplayTable() {
               : null}
           </Td>
           <Td>
-            <Button onClick={handleFullData}>Full Data</Button>
+            <Button bgColor="gray" onClick={() => handleFullData(idx)}>Full Data</Button>
           </Td>
-          <Drawer onClose={onClose} isOpen={isOpen} size={'xl'}>
-              <DrawerOverlay />
-              <DrawerContent>
-                <DrawerCloseButton />
-                <DrawerHeader>{`${current.firstName} ${current.lastName}`}</DrawerHeader>
-                <DrawerBody>
-                  <p></p>
-                </DrawerBody>
-              </DrawerContent>
-            </Drawer>
         </Tr>,
       );
     });
@@ -102,8 +99,10 @@ export default function PatientDisplayTable() {
                   ? `${current.city}, ${current.state}`
                   : null}
               </Td>
+              <Td>
+                <Button bgColor="gray" onClick={() => handleFullData(idx)}>Full Data</Button>
+              </Td>
             </Tr>
-            
           </Fragment>,
         );
       }
@@ -127,6 +126,18 @@ export default function PatientDisplayTable() {
         </Thead>
         <Tbody>{patientsToRender}</Tbody>
       </Table>
+      <Drawer onClose={onClose} isOpen={isOpen} size={"xl"}>
+        <DrawerOverlay />
+        <DrawerContent>
+          <DrawerCloseButton />
+          <DrawerHeader>
+            {currentPatient.firstName + " " + currentPatient.lastName}
+          </DrawerHeader>
+          <DrawerBody>
+            <p></p>
+          </DrawerBody>
+        </DrawerContent>
+      </Drawer>
     </TableContainer>
   );
 }

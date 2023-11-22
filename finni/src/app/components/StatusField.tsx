@@ -20,7 +20,7 @@ export default function StatusField({ currentStatus }) {
             <AccordionIcon />
           </AccordionButton>
         </h2>
-        <AccordionPanel pb={4} position="fixed" bgColor="white" >
+        <AccordionPanel pb={4} position="fixed" bgColor="white">
           <div className="flex flex-col flex-wrap gap-2">
             <Button>Inquiry</Button>
             <Button>Onboarding</Button>
