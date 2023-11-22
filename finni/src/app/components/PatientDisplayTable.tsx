@@ -1,10 +1,17 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 "use client";
 
-import { type NewPatientInterface } from "~/(types)/types";
-import { useContext, useEffect, useState } from "react";
+import StatusField from "./StatusField";
+import { Fragment, useContext, useEffect, useState } from "react";
 import { POSTHelper } from "~/(hooks/helpers)/POSTHelper";
 import {
+  Button,
+  Drawer,
+  DrawerBody,
+  DrawerContent,
+  DrawerOverlay,
+  DrawerHeader,
+  DrawerCloseButton,
   Table,
   Thead,
   Tbody,
@@ -14,6 +21,7 @@ import {
   Td,
   TableCaption,
   TableContainer,
+  useDisclosure,
 } from "@chakra-ui/react";
 import {
   ActiveFieldsContext,
@@ -24,6 +32,7 @@ export default function PatientDisplayTable() {
   const [patientData, setPatientData] = useState([]);
   const [activeFields, setActiveFields] = useContext(ActiveFieldsContext);
   const [filterParam, setFilterParam] = useContext(PatientFilterContext);
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   // Effect to fetch all patient data on initial render only
   useEffect(() => {
@@ -34,7 +43,12 @@ export default function PatientDisplayTable() {
       );
   }, []);
 
-  const patientsToRender = [];
+  const handleFullData = () => {
+    onOpen();
+  };
+
+  // Conditionally render based on search filter params
+  const patientsToRender: JSX.Element[] = [];
   if (filterParam === "") {
     patientData.forEach((current, idx) => {
       patientsToRender.push(
@@ -43,12 +57,27 @@ export default function PatientDisplayTable() {
           <Td>{activeFields["Middle Name"] ? current.middleName : null}</Td>
           <Td>{activeFields["Last Name"] ? current.lastName : null}</Td>
           <Td>{activeFields["Date of birth"] ? current.DOB : null}</Td>
-          <Td>{activeFields["Status"] ? current.status : null}</Td>
+          <Td>
+              {activeFields["Status"] ? <StatusField currentStatus={current.status}>current.status</StatusField> : null}
+          </Td>
           <Td>
             {activeFields["Address"]
               ? `${current.city}, ${current.state}`
               : null}
           </Td>
+          <Td>
+            <Button onClick={handleFullData}>Full Data</Button>
+          </Td>
+          <Drawer onClose={onClose} isOpen={isOpen} size={'xl'}>
+              <DrawerOverlay />
+              <DrawerContent>
+                <DrawerCloseButton />
+                <DrawerHeader>{`${current.firstName} ${current.lastName}`}</DrawerHeader>
+                <DrawerBody>
+                  <p></p>
+                </DrawerBody>
+              </DrawerContent>
+            </Drawer>
         </Tr>,
       );
     });
@@ -61,18 +90,21 @@ export default function PatientDisplayTable() {
         current.lastName.toUpperCase().includes(filterParam?.toUpperCase())
       ) {
         patientsToRender.push(
-          <Tr key={idx}>
-            <Td>{activeFields["First Name"] ? current.firstName : null}</Td>
-            <Td>{activeFields["Middle Name"] ? current.middleName : null}</Td>
-            <Td>{activeFields["Last Name"] ? current.lastName : null}</Td>
-            <Td>{activeFields["Date of birth"] ? current.DOB : null}</Td>
-            <Td>{activeFields["Status"] ? current.status : null}</Td>
-            <Td>
-              {activeFields["Address"]
-                ? `${current.city}, ${current.state}`
-                : null}
-            </Td>
-          </Tr>,
+          <Fragment>
+            <Tr key={idx}>
+              <Td>{activeFields["First Name"] ? current.firstName : null}</Td>
+              <Td>{activeFields["Middle Name"] ? current.middleName : null}</Td>
+              <Td>{activeFields["Last Name"] ? current.lastName : null}</Td>
+              <Td>{activeFields["Date of birth"] ? current.DOB : null}</Td>
+              <Td>{activeFields["Status"] ? current.status : null}</Td>
+              <Td>
+                {activeFields["Address"]
+                  ? `${current.city}, ${current.state}`
+                  : null}
+              </Td>
+            </Tr>
+            
+          </Fragment>,
         );
       }
     });
@@ -90,27 +122,11 @@ export default function PatientDisplayTable() {
             <Th>{activeFields["Date of birth"] ? "Date of birth" : null}</Th>
             <Th>{activeFields["Status"] ? "Status" : null}</Th>
             <Th>{activeFields["Address"] ? "Address (city, state)" : null}</Th>
+            <Th>More Data</Th>
           </Tr>
         </Thead>
         <Tbody>{patientsToRender}</Tbody>
       </Table>
     </TableContainer>
   );
-}
-
-{
-  /* <Tr key={idx}>
-                  <Td>{activeFields["First Name"] ? current.firstName : null}</Td>
-                  <Td>
-                    {activeFields["Middle Name"] ? current.middleName : null}
-                  </Td>
-                  <Td>{activeFields["Last Name"] ? current.lastName : null}</Td>
-                  <Td>{activeFields["Date of birth"] ? current.DOB : null}</Td>
-                  <Td>{activeFields["Status"] ? current.status : null}</Td>
-                  <Td>
-                    {activeFields["Address"]
-                      ? `${current.city}, ${current.state}`
-                      : null}
-                  </Td>
-                </Tr> */
 }
