@@ -2,7 +2,13 @@
 "use client";
 
 import StatusField from "./StatusField";
-import { Fragment, useContext, useEffect, useState } from "react";
+import {
+  Fragment,
+  useContext,
+  useEffect,
+  useState,
+  createContext,
+} from "react";
 import { POSTHelper } from "~/(hooks/helpers)/POSTHelper";
 import {
   Button,
@@ -73,7 +79,9 @@ export default function PatientDisplayTable() {
               : null}
           </Td>
           <Td>
-            <Button bgColor="gray" onClick={() => handleFullData(idx)}>Full Data</Button>
+            <Button bgColor="gray" onClick={() => handleFullData(idx)}>
+              Full Data
+            </Button>
           </Td>
         </Tr>,
       );
@@ -100,7 +108,9 @@ export default function PatientDisplayTable() {
                   : null}
               </Td>
               <Td>
-                <Button bgColor="gray" onClick={() => handleFullData(idx)}>Full Data</Button>
+                <Button bgColor="gray" onClick={() => handleFullData(idx)}>
+                  Full Data
+                </Button>
               </Td>
             </Tr>
           </Fragment>,
@@ -134,7 +144,13 @@ export default function PatientDisplayTable() {
             {currentPatient.firstName + " " + currentPatient.lastName}
           </DrawerHeader>
           <DrawerBody>
-            <p></p>
+            <p>Date of birth: {currentPatient.DOB}</p>
+            <p>Status: {currentPatient.status}</p>
+            <p>
+              Address:{" "}
+              {`${currentPatient.address}, ${currentPatient.city}, ${currentPatient.state} ${currentPatient.zipCode}`}
+            </p>
+            <p>Additional fields: </p>
           </DrawerBody>
         </DrawerContent>
       </Drawer>

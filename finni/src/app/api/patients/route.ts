@@ -16,10 +16,10 @@ export async function POST(
   // cases for different types of requests
   if (data.type === "POST-CreatePatient") {
     try {
-      await Patient.create(data);
+      const patient = await Patient.create(data);
       // Disconnect from database
       await dbDisconnect();
-      return NextResponse.json({ message: "Patient created" });
+      return NextResponse.json({ message: "Patient created", data: patient });
     } catch (error) {
       return NextResponse.json({
         message: "Patient creation failed",

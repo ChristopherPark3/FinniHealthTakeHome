@@ -4,6 +4,7 @@ import {
   type SyntheticEvent,
   useState,
   Fragment,
+  useContext
 } from "react";
 import { toast, Toaster } from "sonner";
 import {
@@ -22,6 +23,8 @@ import {
   NumberInputField,
   Select,
 } from "@chakra-ui/react";
+
+
 
 export default function AddPatientModal({ isOpen, onClose }: any) {
   // using useState hook for data because I was having issues with new FormData() and am running out of time
@@ -59,11 +62,12 @@ export default function AddPatientModal({ isOpen, onClose }: any) {
         other,
       }),
     });
-    const { message } = await response.json();
+    const { message, data } = await response.json();
     console.log(message);
     if (message === "Patient created") {
       // toast.success is just a toast imported from sonner library
       toast.success(`Patient ${firstName} ${lastName} has been created`);
+      console.log(data)
     } else if (message === "Patient creation failed") {
       toast.error(`Failed to create patient ${firstName} ${lastName}`);
     }

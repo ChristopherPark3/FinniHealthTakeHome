@@ -9,12 +9,12 @@ export const ActiveFieldsContext = createContext({
   "Middle Name": true,
   "Last Name": true,
   "Date of birth": true,
-  "Status": true,
-  "Address": true,
-  "Other": true
+  Status: true,
+  Address: true,
+  Other: true,
 });
 
-export const PatientFilterContext = createContext('')
+export const PatientFilterContext = createContext("");
 
 export default function PatientDisplayContainer() {
   const [activeFields, setActiveFields] = useState({
@@ -22,10 +22,10 @@ export default function PatientDisplayContainer() {
     "Middle Name": true,
     "Last Name": true,
     "Date of birth": true,
-    "Status": true,
-    "Address": true,
+    Status: true,
+    Address: true,
   });
-  const [filterParam, setFilterParam] = useState('')
+  const [filterParam, setFilterParam] = useState("");
 
   return (
     <PatientFilterContext.Provider value={[filterParam, setFilterParam]}>
@@ -36,5 +36,5 @@ export default function PatientDisplayContainer() {
         </div>
       </ActiveFieldsContext.Provider>
     </PatientFilterContext.Provider>
-    );
+  );
 }

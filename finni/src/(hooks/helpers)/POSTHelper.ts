@@ -9,6 +9,7 @@ export async function POSTHelper(type: string) {
   });
 
   const data: unknown = await response.json();
+  //@ts-expect-error ts fetch 
   const newData: unknown = data.data
   return newData;
 }
