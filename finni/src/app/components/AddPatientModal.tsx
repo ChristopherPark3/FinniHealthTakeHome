@@ -1,6 +1,6 @@
 "use client";
 
-import { type SyntheticEvent, type SetStateAction, useState } from "react";
+import { type SyntheticEvent, type SetStateAction, useState, Fragment } from "react";
 import { toast, Toaster } from "sonner";
 import {
   Button,
@@ -18,7 +18,6 @@ import {
   NumberInputField,
   Select,
 } from "@chakra-ui/react";
-import { unknown } from "zod";
 
 export default function AddPatientModal({ isOpen, onClose }: any) {
   // using useState hook for data because I was having issues with new FormData() and am running out of time
@@ -61,13 +60,18 @@ export default function AddPatientModal({ isOpen, onClose }: any) {
       }),
     });
     const { message } = await response.json();
-    if (message === "Patient Created") {
+    console.log(message);
+    if (message === "Patient created") {
       toast.success(`Patient ${firstName} ${lastName} has been created`);
+    } else if (message === "Patient creation failed") {
+      toast.error(`Failed to create patient ${firstName} ${lastName}`);
     }
+
     onClose();
   };
+
   return (
-    <>
+    <Fragment>
       <Modal
         blockScrollOnMount={true}
         isOpen={isOpen}
@@ -204,7 +208,7 @@ export default function AddPatientModal({ isOpen, onClose }: any) {
           </ModalFooter>
         </ModalContent>
       </Modal>
-      <Toaster />
-    </>
+      <Toaster richColors />
+    </Fragment>
   );
 }
