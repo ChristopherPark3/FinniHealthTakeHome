@@ -2,6 +2,7 @@ import AddPatientModal from "./AddPatientModal";
 import { useDisclosure } from "@chakra-ui/react";
 import { Button } from "@chakra-ui/react";
 
+// key here is to be used for the purposes of matching fields in the UI to the keys in the db
 const key = {
   "First Name": "firstName",
   "Middle Name": "middleName",
@@ -11,6 +12,7 @@ const key = {
 };
 
 export default function AddPatientButton() {
+  // useDisclosure hook from ChakraUI for modal functionality
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (

@@ -43,10 +43,11 @@ export async function POST(
       })
     } 
   }
-  if (data.type === "GET-OnePatient") {
+  if (data.type === "GET-FilterName") {
     try {
-      // find all patients
-      const patient = await Patient.find({firstName: data.firstName});
+      // find by search
+      const { param } = data
+      const patient = await Patient.find({firstName: `/${param}/`}, 'firstName lastName');
       await dbDisconnect()
       return NextResponse.json({
         message: "GET request for one patient successful",

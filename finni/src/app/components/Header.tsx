@@ -2,6 +2,8 @@
 
 export default function Header() {
   return (
+    // Just returns the finni logo for now. 
+    // I imagine some sort of profile as well as log out button at the top. Maybe some customer support as well.
     <div
       id="Navbar-Container"
       className=" fixed flex w-screen justify-between p-4"

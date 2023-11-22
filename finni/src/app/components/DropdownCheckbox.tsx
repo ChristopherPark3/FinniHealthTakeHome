@@ -6,6 +6,8 @@ import { ActiveFieldsContext } from "./PatientDisplayContainer";
 export const DropdownCheckbox: FC<CheckboxProp> = ({ field, checked }) => {
   const [activeFields, setActiveFields] = useContext(ActiveFieldsContext);
 
+  // Accessing the element checked and updating the active field context
+  // so that the correct columns are rendered and un-rendered in the PatientDisplayTable component
   const handleCheck = (e: any, field: string) => {
     const targetBox = e.target.checked;
     if (!targetBox) {
@@ -14,7 +16,7 @@ export const DropdownCheckbox: FC<CheckboxProp> = ({ field, checked }) => {
       setActiveFields({ ...activeFields, [field]: false });
     }
   };
-  
+
   return (
     <Checkbox
       value={field}

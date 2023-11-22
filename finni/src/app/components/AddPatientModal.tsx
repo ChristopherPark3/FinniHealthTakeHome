@@ -2,7 +2,6 @@
 
 import {
   type SyntheticEvent,
-  type SetStateAction,
   useState,
   Fragment,
 } from "react";
@@ -37,14 +36,10 @@ export default function AddPatientModal({ isOpen, onClose }: any) {
   const [zip, setZip] = useState("");
   const [other, setOther] = useState({});
 
-  // const getData = (event: SyntheticEvent, setter: SetStateAction<string |number> ) => {
-  //   const target = event.target as HTMLInputElement
-  //   setter(target.value)
-  // }
-
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
 
+    // Request to create a new patient
     const response = await fetch("http://localhost:3000/api/patients", {
       method: "POST",
       headers: {
@@ -67,6 +62,7 @@ export default function AddPatientModal({ isOpen, onClose }: any) {
     const { message } = await response.json();
     console.log(message);
     if (message === "Patient created") {
+      // toast.success is just a toast imported from sonner library
       toast.success(`Patient ${firstName} ${lastName} has been created`);
     } else if (message === "Patient creation failed") {
       toast.error(`Failed to create patient ${firstName} ${lastName}`);
@@ -75,6 +71,9 @@ export default function AddPatientModal({ isOpen, onClose }: any) {
     onClose();
   };
 
+
+  // Could definitely modularize how I am updating the state for each field to be POSTed to db.
+  // Some sort of helper would suffice.
   return (
     <Fragment>
       <Modal
