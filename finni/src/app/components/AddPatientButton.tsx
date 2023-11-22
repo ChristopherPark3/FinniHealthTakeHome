@@ -1,7 +1,7 @@
-"use client";
-import { useState } from "react";
+
 import AddPatientModal from "./AddPatientModal"
 import {useDisclosure } from "@chakra-ui/react"
+import {Button} from '@chakra-ui/react'
 
 export default function AddPatientButton() {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -9,9 +9,9 @@ export default function AddPatientButton() {
 
   return (
     <div id="AddPatientModal">
-      <button className="bg-primary" onClick={onOpen}>
+      <Button bgColor="#ED762F"_hover={{background: "#4a3a54", color: "white"}} onClick={onOpen}>
         Add a new patient
-      </button>
+      </Button>
       <AddPatientModal isOpen={isOpen} onClose={onClose}/>
     </div>
   );

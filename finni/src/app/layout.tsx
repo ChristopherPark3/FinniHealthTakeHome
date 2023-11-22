@@ -20,7 +20,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`font-sans ${inter.variable} bg-primary2`}>
+      <body className={`font-sans ${inter.variable} bg-primary2 min-h-[100vh]`}>
         <ChakraProvider>{children}</ChakraProvider>
       </body>
     </html>

@@ -1,11 +1,13 @@
 "use client";
 
-import Navbar from "./components/Navbar";
+import Header from "./components/Header";
+import PatientDisplayContainer from "./components/PatientDisplayContainer";
 
 export default function HomePage() {
   return (
     <div>
-      <Navbar />
+      <Header />
+      <PatientDisplayContainer />
     </div>
   );
 }

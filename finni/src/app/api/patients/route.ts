@@ -61,7 +61,7 @@ export async function POST(
 
 export async function DELETE(req: NextRequest): Promise<void | NextResponse<unknown>> {
   await dbConnect('DELETE')
-    
+
   try {
 
   } catch (error) {
