@@ -8,7 +8,7 @@ import {
   Button,
 } from "@chakra-ui/react";
 
-export default function StatusField({ currentStatus }) {
+export default function StatusField({ currentStatus }: {currentStatus: boolean}) {
   return (
     <Accordion allowToggle>
       <AccordionItem>

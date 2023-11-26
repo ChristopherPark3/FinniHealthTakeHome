@@ -18,7 +18,7 @@ export default function PatientDisplayNavbar() {
 
   return (
     <div id="Patient-Display" className="mt-[3rem] flex gap-4">
-      <Input onChange={handleSearch} borderColor="grey" placeholder="Filter by name" />
+      <Input onChange={handleSearch} borderColor="grey" placeholder="Search by name" />
       <PatientViewToggle />
       <AddPatientButton />
     </div>

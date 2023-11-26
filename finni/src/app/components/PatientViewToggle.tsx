@@ -11,6 +11,7 @@ import { useContext } from "react";
 import { ActiveFieldsContext } from "./PatientDisplayContainer";
 
 export default function PatientViewToggle() {
+  //@ts-expect-error using for useContext hook
   const [activeFields, setActiveFields] = useContext(ActiveFieldsContext);
 
   return (
