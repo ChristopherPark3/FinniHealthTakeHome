@@ -42,6 +42,7 @@ export default function PatientDisplayTable() {
   const [currentPatient, setCurrentPatient] = useState({});
 
   // Effect to fetch all patient data on initial render only
+  // Still needs to implement clean up function
   useEffect(() => {
     POSTHelper("GET-AllPatients")
       .then((res) => setPatientData([...res]))
@@ -59,7 +60,7 @@ export default function PatientDisplayTable() {
   const patientsToRender: JSX.Element[] = [];
   if (filterParam === "") {
     patientData.forEach((current, idx) => {
-      console.log(idx, current.firstName);
+      // console.log(idx, current.firstName);
       patientsToRender.push(
         <Tr key={idx}>
           <Td>{activeFields["First Name"] ? current.firstName : null}</Td>
@@ -118,7 +119,6 @@ export default function PatientDisplayTable() {
       }
     });
   }
-  console.log("From Table: ", filterParam);
   return (
     <TableContainer width="100%">
       <Table variant="striped" colorScheme="gray">

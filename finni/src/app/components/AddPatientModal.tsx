@@ -67,7 +67,6 @@ export default function AddPatientModal({ isOpen, onClose }: any) {
     if (message === "Patient created") {
       // toast.success is just a toast imported from sonner library
       toast.success(`Patient ${firstName} ${lastName} has been created`);
-      console.log(data)
     } else if (message === "Patient creation failed") {
       toast.error(`Failed to create patient ${firstName} ${lastName}`);
     }
@@ -203,7 +202,6 @@ export default function AddPatientModal({ isOpen, onClose }: any) {
             </div>
           </ModalBody>
           <ModalFooter>
-            <Button>Add a field</Button>
             <Button
               type="submit"
               id="Create-Patient-Button"

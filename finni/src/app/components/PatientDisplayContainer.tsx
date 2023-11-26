@@ -11,7 +11,6 @@ export const ActiveFieldsContext = createContext({
   "Date of birth": true,
   Status: true,
   Address: true,
-  Other: true,
 });
 
 export const PatientFilterContext = createContext("");

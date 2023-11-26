@@ -11,7 +11,7 @@ export default function PatientDisplayNavbar() {
 
   // handler for field equality search
   const handleSearch = (e: SyntheticEvent) => {
-    const searchParameter: string = e.target.value
+    const searchParameter: string = e.target.value 
     setFilterParam(searchParameter)
   }
   

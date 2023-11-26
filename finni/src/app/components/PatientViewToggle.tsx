@@ -5,6 +5,7 @@ import {
   Box,
   AccordionIcon,
   AccordionPanel,
+  Checkbox,
 } from "@chakra-ui/react";
 import { DropdownCheckbox } from "./DropdownCheckbox";
 import { useContext } from "react";
@@ -37,12 +38,64 @@ export default function PatientViewToggle() {
               id="Panel-Container"
               className="flex flex-col flex-wrap gap-2 "
             >
-              <DropdownCheckbox field={"First Name"} checked={activeFields["First Name"]} />
-              <DropdownCheckbox field={"Middle Name"} checked={activeFields["Middle Name"]} />
-              <DropdownCheckbox field={"Last Name"} checked={activeFields["Last Name"]} />
-              <DropdownCheckbox field={"Date of birth"} checked={activeFields["Date of birth"]} />
-              <DropdownCheckbox field={"Status"} checked={activeFields["Status"]} />
-              <DropdownCheckbox field={"Address"} checked={activeFields["Address"]} />
+              <Checkbox
+                value={"First Name"}
+                isChecked={activeFields["First Name"]}
+                onChange={(e) => {
+                  !activeFields["First Name"]
+                    ? setActiveFields({ ...activeFields, "First Name": true })
+                    : setActiveFields({ ...activeFields, "First Name": false });
+                }}
+              >
+                First Name
+              </Checkbox>
+              <Checkbox
+                value={"Middle Name"}
+                isChecked={activeFields["Middle Name"]}
+                onChange={(e) => {
+                  !activeFields["Middle Name"]
+                    ? setActiveFields({ ...activeFields, "Middle Name": true })
+                    : setActiveFields({ ...activeFields, "Middle Name": false });
+                }}
+              >
+                Middle Name
+              </Checkbox>
+              <Checkbox
+                value={"Last Name"}
+                isChecked={activeFields["Last Name"]}
+                onChange={(e) => {
+                  !activeFields["Last Name"]
+                    ? setActiveFields({ ...activeFields, "Last Name": true })
+                    : setActiveFields({ ...activeFields, "Last Name": false });
+                }}
+              >
+                Last Name
+              </Checkbox>
+              <Checkbox
+                value={"Date of birth"}
+                isChecked={activeFields["Date of birth"]}
+                onChange={(e) => {
+                  !activeFields["Date of birth"]
+                    ? setActiveFields({ ...activeFields, "Date of birth": true })
+                    : setActiveFields({ ...activeFields, "Date of birth": false });
+                }}
+              >
+                Date of birth
+              </Checkbox>
+              <Checkbox value={"Status"} isChecked={activeFields["Status"]} onChange={(e) => {
+                  !activeFields["Status"]
+                    ? setActiveFields({ ...activeFields, "Status": true })
+                    : setActiveFields({ ...activeFields, "Status": false });
+                }}>
+                Status
+              </Checkbox>
+              <Checkbox value={"Address"} isChecked={activeFields["Address"]} onChange={(e) => {
+                  !activeFields["Address"]
+                    ? setActiveFields({ ...activeFields, "Address": true })
+                    : setActiveFields({ ...activeFields, "Address": false });
+                }}>
+                Address
+              </Checkbox>
             </div>
           </AccordionPanel>
         </AccordionItem>
