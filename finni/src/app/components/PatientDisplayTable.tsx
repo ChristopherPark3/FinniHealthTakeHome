@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 "use client";
 
+import { useQueryClient, useQuery } from "@tanstack/react-query";
 import StatusField from "./StatusField";
 import {
   Fragment,
@@ -9,7 +10,7 @@ import {
   useState,
   createContext,
 } from "react";
-import { POSTHelper } from "~/(hooks/helpers)/POSTHelper";
+import { getPatients } from "~/(apiFuncs)/Patients";
 import {
   Button,
   Drawer,
@@ -28,6 +29,7 @@ import {
   TableCaption,
   TableContainer,
   useDisclosure,
+  Spinner,
 } from "@chakra-ui/react";
 import {
   ActiveFieldsContext,
@@ -41,15 +43,19 @@ export default function PatientDisplayTable() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [currentPatient, setCurrentPatient] = useState({});
 
-  // Effect to fetch all patient data on initial render only
-  // Still needs to implement clean up function
-  useEffect(() => {
-    POSTHelper("GET-AllPatients")
-      .then((res) => setPatientData([...res]))
-      .catch((err) =>
-        console.log({ message: "error in fetch", error: err.message }),
-      );
-  }, []);
+  // Access the client
+  const queryClient = useQueryClient();
+
+  const { isPending, isError, data, error } = useQuery({
+    queryKey: ["patients"],
+    queryFn: getPatients,
+  });
+  if (isPending) {
+    return <Spinner size="xl" />;
+  }
+  if (isError) {
+    return <div>Error: {error.message}</div>;
+  }
 
   const handleFullData = (idx: number) => {
     setCurrentPatient({ ...patientData[idx] });
@@ -59,7 +65,7 @@ export default function PatientDisplayTable() {
   // Conditionally render based on search filter params
   const patientsToRender: JSX.Element[] = [];
   if (filterParam === "") {
-    patientData.forEach((current, idx) => {
+    data.forEach((current, idx) => {
       // console.log(idx, current.firstName);
       patientsToRender.push(
         <Tr key={idx}>
@@ -90,7 +96,7 @@ export default function PatientDisplayTable() {
   } else {
     // Caveat to iterating through this is when the database has tons of data
     // If I were to do it again, I would probably try to make the firstName value a set for constant look up time
-    patientData.forEach((current, idx) => {
+    data.forEach((current, idx) => {
       if (
         current.firstName.toUpperCase().includes(filterParam?.toUpperCase()) ||
         current.lastName.toUpperCase().includes(filterParam?.toUpperCase())
@@ -119,6 +125,7 @@ export default function PatientDisplayTable() {
       }
     });
   }
+
   return (
     <TableContainer width="100%">
       <Table variant="striped" colorScheme="gray">

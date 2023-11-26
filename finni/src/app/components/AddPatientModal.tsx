@@ -1,11 +1,7 @@
 "use client";
 
-import {
-  type SyntheticEvent,
-  useState,
-  Fragment,
-  useContext
-} from "react";
+import { type SyntheticEvent, useState, Fragment, useContext } from "react";
+import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { toast, Toaster } from "sonner";
 import {
   Button,
@@ -23,10 +19,11 @@ import {
   NumberInputField,
   Select,
 } from "@chakra-ui/react";
-
-
+import { createNewPatient } from "~/(apiFuncs)/Patients";
 
 export default function AddPatientModal({ isOpen, onClose }: any) {
+  const queryClient = useQueryClient();
+
   // using useState hook for data because I was having issues with new FormData() and am running out of time
   const [firstName, setFirstName] = useState("");
   const [middleName, setMiddleName] = useState("");
@@ -39,17 +36,9 @@ export default function AddPatientModal({ isOpen, onClose }: any) {
   const [zip, setZip] = useState("");
   const [other, setOther] = useState({});
 
-  const handleSubmit = async (e: SyntheticEvent) => {
-    e.preventDefault();
-
-    // Request to create a new patient
-    const response = await fetch("http://localhost:3000/api/patients", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        type: "POST-CreatePatient",
+  const { mutateAsync } = useMutation({
+    mutationFn: () =>
+      createNewPatient(
         firstName,
         middleName,
         lastName,
@@ -58,11 +47,19 @@ export default function AddPatientModal({ isOpen, onClose }: any) {
         address,
         city,
         state,
-        zipCode: zip,
+        zip,
         other,
-      }),
-    });
-    const { message, data } = await response.json();
+      ),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["patients"] });
+    },
+  });
+
+  const handleSubmit = async (e: SyntheticEvent) => {
+    e.preventDefault();
+
+    const response = await mutateAsync()
+    const { message }: { message: any } = await response.json();
     console.log(message);
     if (message === "Patient created") {
       // toast.success is just a toast imported from sonner library
@@ -73,7 +70,6 @@ export default function AddPatientModal({ isOpen, onClose }: any) {
 
     onClose();
   };
-
 
   // Could definitely modularize how I am updating the state for each field to be POSTed to db.
   // Some sort of helper would suffice.

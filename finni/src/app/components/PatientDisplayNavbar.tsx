@@ -1,7 +1,6 @@
 import { type SyntheticEvent, useContext } from "react";
 import AddPatientButton from "./AddPatientButton";
 import PatientViewToggle from "./PatientViewToggle";
-import { POSTHelper } from "~/(hooks/helpers)/POSTHelper";
 import { PatientFilterContext } from "./PatientDisplayContainer";
 import { Button, Input } from "@chakra-ui/react";
 
