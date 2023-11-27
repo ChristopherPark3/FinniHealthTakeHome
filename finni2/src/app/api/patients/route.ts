@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { type NextRequest, NextResponse } from "next/server";
-import Patient from "@/(models)/Patient";
-import { dbDisconnect, dbConnect } from "@/(utils)/connect";
+import { dbConnect, dbDisconnect } from "../../../(utils)/connect";
+import Patient from "../../(models)/patient";
+import { NewPatientInterface } from "@/(types)/types";
 export async function POST(
   req: NextRequest,
 ): Promise<void | NextResponse<unknown>> {
@@ -9,7 +10,7 @@ export async function POST(
   await dbConnect("POST");
 
   const data = await req.json();
-  console.log(data)
+  console.log(data);
 
   // cases for different types of requests
   if (data.type === "POST-CreatePatient") {
@@ -22,13 +23,13 @@ export async function POST(
       return NextResponse.json({
         message: "Patient creation failed",
         details: error.message,
-      })
-    } 
+      });
+    }
   }
   if (data.type === "GET-AllPatients") {
     try {
       // find all patients
-      const patients = await Patient.find({});
+      const patients: NewPatientInterface[] = await Patient.find({});
       await dbDisconnect();
       return NextResponse.json({
         message: "Request for all patients successful",
@@ -38,15 +39,18 @@ export async function POST(
       return NextResponse.json({
         message: "Failed to get all patients",
         details: error.message,
-      })
-    } 
+      });
+    }
   }
   if (data.type === "GET-FilterName") {
     try {
       // find by search
-      const { param } = data
-      const patient = await Patient.find({firstName: `/${param}/`}, 'firstName lastName');
-      await dbDisconnect()
+      const { param } = data;
+      const patient = await Patient.find(
+        { firstName: `/${param}/` },
+        "firstName lastName",
+      );
+      await dbDisconnect();
       return NextResponse.json({
         message: "GET request for one patient successful",
         data: patient,
@@ -58,33 +62,34 @@ export async function POST(
       });
     }
   }
-  if (data.type === 'UPDATE-PatientStatus') {
+  if (data.type === "UPDATE-PatientStatus") {
     try {
-      const {id, statusUpdate} = data
-  
-      const filter = {_id: id}
-      const value = {status: statusUpdate}
-  
-      const updateStatus = await Patient.findOneAndUpdate(filter, value)
+      const { id, statusUpdate } = data;
+
+      const filter = { _id: id };
+      const value = { status: statusUpdate };
+
+      const updateStatus = await Patient.findOneAndUpdate(filter, value);
       await dbDisconnect();
       return NextResponse.json({
         message: `Status successfully updated to ${statusUpdate}`,
-        data: updateStatus
-      })
+        data: updateStatus,
+      });
     } catch (error) {
       return NextResponse.json({
         message: "Failed to update patient",
-        details: error?.message
-      })
+        details: error?.message,
+      });
     }
   }
 }
 
-export async function DELETE(req: NextRequest): Promise<void | NextResponse<unknown>> {
-  await dbConnect('DELETE')
+export async function DELETE(
+  req: NextRequest,
+): Promise<void | NextResponse<unknown>> {
+  await dbConnect("DELETE");
 
   try {
-
   } catch (error) {
     return NextResponse.json({
       message: "Failed to delete patient",
@@ -93,3 +98,29 @@ export async function DELETE(req: NextRequest): Promise<void | NextResponse<unkn
   }
 }
 
+export async function UPDATE(
+  req: NextRequest,
+): Promise<void | NextResponse<unknown>> {
+  // fitler by id stored in mongodb
+  await dbConnect("UPDATE");
+  const data = await req.json();
+
+  try {
+    const { id, statusUpdate } = data;
+
+    const filter = { _id: id };
+    const value = { status: statusUpdate };
+
+    const updateStatus = await Patient.findOneAndUpdate(id, statusUpdate);
+    await dbDisconnect();
+    return NextResponse.json({
+      message: `Status successfully updated to ${statusUpdate}`,
+      data: updateStatus,
+    });
+  } catch (error) {
+    return NextResponse.json({
+      message: "Failed to update patient",
+      details: error?.message,
+    });
+  }
+}

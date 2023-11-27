@@ -1,19 +1,16 @@
 "use client";
 
-import DataTable from "@/app/table";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useState } from "react";
-import Header from "./_components/Header";
+import PatientDisplayTable from "./components/PatientDisplayTable";
+import Header from "./components/Header";
 
-export default function Home() {
+export default function HomePage() {
   const [queryClient] = useState(() => new QueryClient());
-
   return (
     <QueryClientProvider client={queryClient}>
-      <div id="MainPageContainer" className="flex flex-col p-8">
-        <Header />
-        <DataTable />
-      </div>
+      <Header />
+      <PatientDisplayTable />
     </QueryClientProvider>
   );
 }
