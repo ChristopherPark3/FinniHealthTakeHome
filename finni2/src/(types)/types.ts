@@ -14,6 +14,7 @@ export type NewPatientInterface = {
   state: string;
   zipCode: string;
   other?: ArbitraryField;
+  onRowEditCommit?: Function
 };
 
 export type QueryBody = Record<string, string | number | undefined>;

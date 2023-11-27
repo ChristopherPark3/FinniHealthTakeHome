@@ -147,18 +147,20 @@ export const NewPatientModal: FC<ModalProps> = ({ open, setOpen }) => {
                 required
                 format="MM-DD-YYYY"
                 onChange={(e: unknown) => {
-                  //@ts-ignore
+                  //@ts-ignore there is no type for this event for the datefield component
                   const data = e.$d.toString();
                   let month = `${data[4]}${data[5]}${data[6]}`;
                   month;
+                  //@ts-ignore
                   let day = e.$D.toString();
                   if (day.length === 1) {
                     day = "0" + day;
                   }
                   console.log(day);
+                  //@ts-ignore
                   const year = e.$y.toString();
                   const DOB = `${year}-${dateKey[month]}-${day}`;
-                  console.log(DOB)
+                  console.log(DOB);
                   setFormData({ ...formData, DOB });
                 }}
               />
@@ -249,7 +251,7 @@ export const NewPatientModal: FC<ModalProps> = ({ open, setOpen }) => {
           </Button>
         </Box>
       </Modal>
-      <Toaster richColors/>
+      <Toaster richColors />
     </div>
   );
 };

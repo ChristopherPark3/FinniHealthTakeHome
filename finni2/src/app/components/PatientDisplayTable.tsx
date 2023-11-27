@@ -1,14 +1,23 @@
 "use client";
 
-import * as React from "react";
-import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
+import { useState } from "react";
+import {
+  DataGrid,
+  GridColDef,
+  GridValueGetterParams,
+  MuiEvent,
+} from "@mui/x-data-grid";
 import { useQueryClient, useQuery } from "@tanstack/react-query";
 import { getPatients } from "../../(apiFuncs)/patient";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import { NewPatientInterface } from "../../(types)/types";
+import Button from "@mui/material/Button";
+import { NewFieldModal } from "./NewFieldModal";
 
 export default function PatientDisplayTable() {
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
   const queryClient = useQueryClient();
   const { isPending, isError, data, error } = useQuery({
     queryKey: ["patients"],
@@ -24,31 +33,49 @@ export default function PatientDisplayTable() {
   if (error) {
     return <span>Error: {error.message}</span>;
   }
+
+
+
+  const columns: GridColDef[] = [
+    { field: "id", headerName: "id", width: 70 },
+    {
+      field: "firstName",
+      headerName: "First Name",
+      width: 130,
+      editable: true,
+    },
+    {
+      field: "middleName",
+      headerName: "Middle Name",
+      width: 130,
+      editable: true,
+    },
+    { field: "lastName", headerName: "Last Name", width: 130, editable: true },
+    { field: "DOB", headerName: "Date of Birth", width: 130, editable: true },
+    { field: "status", headerName: "Status", width: 130, editable: true },
+    { field: "address", headerName: "Street", width: 160, editable: true },
+    { field: "city", headerName: "City", width: 130, editable: true },
+    { field: "state", headerName: "State", width: 130, editable: true },
+    { field: "zipCode", headerName: "Zip Code", width: 130, editable: true },
+  ];
   const rows: NewPatientInterface[] = data;
   rows.forEach((current, idx) => {
     current.id = idx + 1;
     if (current.address2) {
-      columns.push({field: `${current}`, headerName: 'Address2', width: 130})
+      columns.push({ field: `${current}`, headerName: "Address2", width: 130 });
     }
     if (current.other && Object.keys(current.other).length > 0) {
       Object.keys(current.other).forEach((curr) => {
-        columns.push({ field: `${curr}`, headerName: curr, width: 130 });
+        columns.push({
+          field: `${curr}`,
+          headerName: curr,
+          width: 130,
+          editable: true,
+        });
       });
     }
   });
-  const columns: GridColDef[] = [
-    { field: "id", headerName: "id", width: 70 },
-    { field: "firstName", headerName: "First Name", width: 130 },
-    { field: "middleName", headerName: "Middle Name", width: 130 },
-    { field: "lastName", headerName: "Last Name", width: 130 },
-    { field: "DOB", headerName: "Date of Birth", width: 130 },
-    { field: "status", headerName: "Status", width: 130 },
-    { field: "address", headerName: "Street", width: 160 },
-    { field: "city", headerName: "City", width: 130 },
-    { field: "state", headerName: "State", width: 130 },
-    { field: "zipCode", headerName: "Zip Code", width: 130 },
-  ];
-  console.log(data);
+
   return (
     <div style={{ height: 600, width: "100%" }}>
       <DataGrid
@@ -62,6 +89,15 @@ export default function PatientDisplayTable() {
         pageSizeOptions={[5, 10, 15, 20, 25]}
         checkboxSelection
       />
+
+      <Button
+        variant="contained"
+        className="bg-[#f4a77b] hover:bg-[#c28764]"
+        onClick={handleOpen}
+      >
+        Add new field
+      </Button>
+      <NewFieldModal open={open} setOpen={setOpen} />
     </div>
   );
 }

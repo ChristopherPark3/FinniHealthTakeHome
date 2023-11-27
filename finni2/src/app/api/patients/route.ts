@@ -62,17 +62,17 @@ export async function POST(
       });
     }
   }
-  if (data.type === "UPDATE-PatientStatus") {
+  if (data.type === "UPDATE-NewField") {
     try {
-      const { id, statusUpdate } = data;
+      const { firstName, newFieldName } = data;
 
-      const filter = { _id: id };
-      const value = { status: statusUpdate };
+      const filter = { firstName };
+      const value = { other: {[newFieldName]: 'test'} };
 
-      const updateStatus = await Patient.findOneAndUpdate(filter, value);
+      const updateStatus = await Patient.updateOne(filter, value);
       await dbDisconnect();
       return NextResponse.json({
-        message: `Status successfully updated to ${statusUpdate}`,
+        message: `Successfully created ${newFieldName} field`,
         data: updateStatus,
       });
     } catch (error) {
