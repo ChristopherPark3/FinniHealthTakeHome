@@ -2,19 +2,26 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { dbConnect, dbDisconnect } from "../../../(utils)/connect";
 import Patient from "../../(models)/patient";
-import { NewPatientInterface } from "../../../(types)/types";
+import { type NewPatientInterface } from "../../../(types)/types";
 export async function POST(
   req: NextRequest,
 ): Promise<void | NextResponse<unknown>> {
   // Establish connection to MongoDB database
   await dbConnect("POST");
 
-  const data = await req.json();
+  const data: {
+    type: string;
+    firstName?: string;
+    lastName?: string;
+    newFieldName?: string | number | symbol;
+    param?: string
+  } = await req.json();
   console.log(data);
 
   // cases for different types of requests
   if (data.type === "POST-CreatePatient") {
     try {
+      //@ts-expect-error definitely callable from mongoose docs. Suppose there is no type for this method
       const patient = await Patient.create(data);
       // Disconnect from database
       await dbDisconnect();
@@ -22,6 +29,7 @@ export async function POST(
     } catch (error) {
       return NextResponse.json({
         message: "Patient creation failed",
+        //@ts-expect-error no error type
         details: error.message,
       });
     }
@@ -29,15 +37,17 @@ export async function POST(
   if (data.type === "GET-AllPatients") {
     try {
       // find all patients
+      //@ts-expect-error definitely callable from mongoose docs. Suppose there is no type for this method
       const patients: NewPatientInterface[] = await Patient.find({});
       await dbDisconnect();
       return NextResponse.json({
         message: "Request for all patients successful",
         data: patients,
       });
-    } catch (error) {
+    } catch (error: unknown) {
       return NextResponse.json({
         message: "Failed to get all patients",
+        //@ts-expect-error no error type
         details: error.message,
       });
     }
@@ -46,6 +56,7 @@ export async function POST(
     try {
       // find by search
       const { param } = data;
+      //@ts-expect-error definitely callable from mongoose docs. Suppose there is no type for this method
       const patient = await Patient.find(
         { firstName: `/${param}/` },
         "firstName lastName",
@@ -58,6 +69,7 @@ export async function POST(
     } catch (error) {
       return NextResponse.json({
         message: "Failed to get patient",
+        //@ts-expect-error no error type
         details: error.message,
       });
     }
@@ -67,60 +79,38 @@ export async function POST(
       const { firstName, newFieldName } = data;
 
       const filter = { firstName };
-      const value = { other: {[newFieldName]: 'test'} };
+      const value = { other: { [String(newFieldName)]: "test" } };
 
-      const updateStatus = await Patient.updateOne(filter, value);
+      //@ts-expect-error definitely callable from mongoose docs. Suppose there is no type for this method
+
+      const result = await Patient.findOneAndUpdate(filter, value);
+      // const updateStatus = await Patient.set(filter, value);
       await dbDisconnect();
       return NextResponse.json({
-        message: `Successfully created ${newFieldName} field`,
-        data: updateStatus,
+        message: `Successfully created ${String(newFieldName)} field`,
+        data: result,
       });
     } catch (error) {
       return NextResponse.json({
         message: "Failed to update patient",
+        //@ts-expect-error no error type
         details: error?.message,
       });
     }
   }
 }
 
-export async function DELETE(
-  req: NextRequest,
-): Promise<void | NextResponse<unknown>> {
-  await dbConnect("DELETE");
+// export async function DELETE(
+//   req: NextRequest,
+// ): Promise<void | NextResponse<unknown>> {
+//   await dbConnect("DELETE");
 
-  try {
-  } catch (error) {
-    return NextResponse.json({
-      message: "Failed to delete patient",
-      details: error?.message,
-    });
-  }
-}
-
-export async function UPDATE(
-  req: NextRequest,
-): Promise<void | NextResponse<unknown>> {
-  // fitler by id stored in mongodb
-  await dbConnect("UPDATE");
-  const data = await req.json();
-
-  try {
-    const { id, statusUpdate } = data;
-
-    const filter = { _id: id };
-    const value = { status: statusUpdate };
-
-    const updateStatus = await Patient.findOneAndUpdate(id, statusUpdate);
-    await dbDisconnect();
-    return NextResponse.json({
-      message: `Status successfully updated to ${statusUpdate}`,
-      data: updateStatus,
-    });
-  } catch (error) {
-    return NextResponse.json({
-      message: "Failed to update patient",
-      details: error?.message,
-    });
-  }
-}
+//   try {
+//   } catch (error) {
+//     return NextResponse.json({
+//       message: "Failed to delete patient",
+//       //@ts-expect-error no error type
+//       details: error?.message,
+//     });
+//   }
+// }

@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from "react";
+import { type Dispatch, type SetStateAction } from "react";
 
 export type NewPatientInterface = {
   _id?: number | undefined;
@@ -14,7 +14,6 @@ export type NewPatientInterface = {
   state: string;
   zipCode: string;
   other?: ArbitraryField;
-  onRowEditCommit?: Function
 };
 
 export type QueryBody = Record<string, string | number | undefined>;

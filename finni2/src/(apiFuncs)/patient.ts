@@ -1,6 +1,6 @@
 // Purpose of this is strictly to get all patients in the database
 
-import { NewPatientInterface } from "~/(types)/types";
+import { type NewPatientInterface } from "~/(types)/types";
 
 export async function getPatients() {
   const response = await fetch("/api/patients", {
@@ -11,8 +11,8 @@ export async function getPatients() {
     body: JSON.stringify({ type: "GET-AllPatients" }),
   });
   const data: unknown = await response.json();
-  //@ts-ignore
-  const newData: any[] = data?.data;
+  //@ts-expect-error data is something I have to type still
+  const newData: NewPatientInterface[] = data?.data as NewPatientInterface[];
   return newData;
 }
 
@@ -62,5 +62,3 @@ export async function updateField(firstName: string, newFieldName: string) {
 
   return response;
 }
-
-

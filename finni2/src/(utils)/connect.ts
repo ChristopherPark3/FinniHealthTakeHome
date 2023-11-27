@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import mongoose from "mongoose";
 
 const MONGODB_URI = process.env.MONGODB_URI;
@@ -11,6 +13,7 @@ export async function dbConnect(string: string): Promise<void> {
   } catch (error: unknown) {
     console.log({
       message: "There was an error connecting to the database",
+      //@ts-expect-error no error type
       details: error.message,
     });
     return;

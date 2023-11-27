@@ -1,30 +1,26 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 "use client";
 
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import TextField from "@mui/material/TextField";
-import {
-  SetStateAction,
-  type FC,
-  Dispatch,
-  useState,
-  SyntheticEvent,
-} from "react";
+import { type SetStateAction, type FC, type Dispatch, useState } from "react";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateField } from "@mui/x-date-pickers/DateField";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
+import Select, { type SelectChangeEvent } from "@mui/material/Select";
 import Button from "@mui/material/Button";
-import { NewPatientInterface } from "~/(types)/types";
+import { type NewPatientInterface } from "~/(types)/types";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { createNewPatient } from "../../(apiFuncs)/patient";
 import { toast, Toaster } from "sonner";
 
-const dateKey: { [key: string]: string } = {
+const dateKey: Record<string, string> = {
   Jan: "01",
   Feb: "02",
   Mar: "03",
@@ -65,13 +61,13 @@ export const NewPatientModal: FC<ModalProps> = ({ open, setOpen }) => {
   const { mutateAsync } = useMutation({
     mutationFn: () => createNewPatient(formData),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["patients"] });
+      void queryClient.invalidateQueries({ queryKey: ["patients"] });
     },
   });
 
   const handleSubmit = async () => {
     const response = await mutateAsync();
-    const { message }: { message: any } = await response.json();
+    const { message }: { message: string } = await response.json();
     console.log(message);
     if (message === "Patient created") {
       // toast.success is just a toast imported from sonner library
@@ -147,18 +143,18 @@ export const NewPatientModal: FC<ModalProps> = ({ open, setOpen }) => {
                 required
                 format="MM-DD-YYYY"
                 onChange={(e: unknown) => {
-                  //@ts-ignore there is no type for this event for the datefield component
-                  const data = e.$d.toString();
-                  let month = `${data[4]}${data[5]}${data[6]}`;
+                  //@ts-expect-error there is no type for this event
+                  const data = String(e.$d);
+                  const month = `${data[4]}${data[5]}${data[6]}`;
                   month;
-                  //@ts-ignore
-                  let day = e.$D.toString();
+                  //@ts-expect-error there is no type for this event
+                  let day = String(e.$D);
                   if (day.length === 1) {
                     day = "0" + day;
                   }
                   console.log(day);
-                  //@ts-ignore
-                  const year = e.$y.toString();
+                  //@ts-expect-error there is no type for this event
+                  const year = String(e.$y);
                   const DOB = `${year}-${dateKey[month]}-${day}`;
                   console.log(DOB);
                   setFormData({ ...formData, DOB });

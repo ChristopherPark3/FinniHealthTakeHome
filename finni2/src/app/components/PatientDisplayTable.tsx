@@ -3,23 +3,22 @@
 import { useState } from "react";
 import {
   DataGrid,
-  GridColDef,
-  GridValueGetterParams,
-  MuiEvent,
+  type GridColDef,
 } from "@mui/x-data-grid";
 import { useQueryClient, useQuery } from "@tanstack/react-query";
 import { getPatients } from "../../(apiFuncs)/patient";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
-import { NewPatientInterface } from "../../(types)/types";
+import { type NewPatientInterface } from "../../(types)/types";
 import Button from "@mui/material/Button";
 import { NewFieldModal } from "./NewFieldModal";
 
 export default function PatientDisplayTable() {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const queryClient = useQueryClient();
-  const { isPending, isError, data, error } = useQuery({
+  const { isPending, data, error } = useQuery({
     queryKey: ["patients"],
     queryFn: getPatients,
   });
@@ -33,8 +32,6 @@ export default function PatientDisplayTable() {
   if (error) {
     return <span>Error: {error.message}</span>;
   }
-
-
 
   const columns: GridColDef[] = [
     { field: "id", headerName: "id", width: 70 },
@@ -62,7 +59,7 @@ export default function PatientDisplayTable() {
   rows.forEach((current, idx) => {
     current.id = idx + 1;
     if (current.address2) {
-      columns.push({ field: `${current}`, headerName: "Address2", width: 130 });
+      columns.push({ field: `${current.address2}`, headerName: "Address2", width: 130 });
     }
     if (current.other && Object.keys(current.other).length > 0) {
       Object.keys(current.other).forEach((curr) => {

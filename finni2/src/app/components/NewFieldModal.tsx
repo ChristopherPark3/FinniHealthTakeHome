@@ -1,6 +1,6 @@
 "use client";
 
-import { Dispatch, FC, SetStateAction, useState } from "react";
+import { type Dispatch, type FC, type SetStateAction, useState } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
@@ -8,7 +8,7 @@ import Modal from "@mui/material/Modal";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
+import Select, { type SelectChangeEvent } from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateField } from "../../(apiFuncs)/patient";
@@ -25,7 +25,7 @@ export const NewFieldModal: FC<ModalProps> = ({ open, setOpen }) => {
   const { mutateAsync } = useMutation({
     mutationFn: () => updateField("Christopher", newFieldName),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["patients"] });
+      void queryClient.invalidateQueries({ queryKey: ["patients"] });
     },
   });
 
@@ -36,15 +36,16 @@ export const NewFieldModal: FC<ModalProps> = ({ open, setOpen }) => {
 
   const handleNewFieldSubmission = async () => {
     const response = await mutateAsync();
-    const { message, details }: { message: unknown } = await response.json();
+    const { message, details }: { message: string; details: unknown } =
+      (await response.json()) as { message: string; details: string };
     if (message === `Successfully created ${newFieldName} field`) {
       toast.success(`Successfully created ${newFieldName} field`);
-      setNewFieldType('')
-      setNewFieldName('')
-      handleClose()
+      setNewFieldType("");
+      setNewFieldName("");
+      handleClose();
     } else {
-      toast.error(`There was an error creating ${newFieldName} field`)
-      console.log(details)
+      toast.error(`There was an error creating ${newFieldName} field`);
+      console.log(details);
     }
   };
   return (
@@ -66,7 +67,9 @@ export const NewFieldModal: FC<ModalProps> = ({ open, setOpen }) => {
           />
           <Box sx={{ minWidth: 120 }}>
             <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Field data type</InputLabel>
+              <InputLabel id="demo-simple-select-label">
+                Field data type
+              </InputLabel>
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
@@ -81,11 +84,16 @@ export const NewFieldModal: FC<ModalProps> = ({ open, setOpen }) => {
               </Select>
             </FormControl>
           </Box>
-          <Button variant="contained" className="bg-orange hover:bg-purple" onClick={handleNewFieldSubmission}>
+          <Button
+            variant="contained"
+            className="bg-orange hover:bg-purple"
+            onClick={handleNewFieldSubmission}
+          >
             Create new field
           </Button>
         </Box>
       </Modal>
+      <Toaster />
     </div>
   );
 };
