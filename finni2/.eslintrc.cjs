@@ -1,9 +1,7 @@
 /** @type {import("eslint").Linter.Config} */
 const config = {
   parser: "@typescript-eslint/parser",
-  parserOptions: {
-    project: true,
-  },
+  parserOptions: {},
   plugins: ["@typescript-eslint"],
   extends: [
     "plugin:@next/next/recommended",
@@ -32,6 +30,7 @@ const config = {
       },
     ],
   },
+  ignorePatterns: ["env.js"],
 };
 
 module.exports = config;
