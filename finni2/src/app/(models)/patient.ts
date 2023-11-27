@@ -9,6 +9,7 @@ const patientSchema = new Schema({
   DOB: { type: String, required: true },
   status: { type: String, required: true },
   address: { type: String, required: true },
+  address2: {type: String, required: false},
   city: { type: String, required: true },
   state: { type: String, required: true },
   zipCode: { type: Number, required: true },

@@ -2,7 +2,7 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { dbConnect, dbDisconnect } from "../../../(utils)/connect";
 import Patient from "../../(models)/patient";
-import { NewPatientInterface } from "@/(types)/types";
+import { NewPatientInterface } from "../../../(types)/types";
 export async function POST(
   req: NextRequest,
 ): Promise<void | NextResponse<unknown>> {

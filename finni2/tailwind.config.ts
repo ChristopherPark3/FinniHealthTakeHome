@@ -8,9 +8,11 @@ export default {
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],
       },
-      bacgroundColor: {
-        primary: "#f1eade"
-      }
+      colors: {
+        primary: "#f1eade",
+        orange: "#ED762F",
+        purple: "#4a3a54",
+      },
     },
   },
   plugins: [],
