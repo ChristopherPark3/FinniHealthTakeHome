@@ -41,7 +41,19 @@ export default function PatientDisplayTable() {
   const [activeFields, setActiveFields] = useContext(ActiveFieldsContext);
   const [filterParam, setFilterParam] = useContext(PatientFilterContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [currentPatient, setCurrentPatient] = useState({});
+  const [currentPatient, setCurrentPatient] = useState({
+    id: null,
+    firstName: null,
+    middleName: null,
+    lastName: null,
+    status: null,
+    DOB: null,
+    address: null,
+    city: null,
+    state: null,
+    zip: null,
+    other: null,
+  });
 
   // Access the client
   const queryClient = useQueryClient();
@@ -56,9 +68,9 @@ export default function PatientDisplayTable() {
   if (isError) {
     return <div>Error: {error.message}</div>;
   }
-
+  console.log(data);
   const handleFullData = (idx: number) => {
-    setCurrentPatient({ ...patientData[idx] });
+    setCurrentPatient({ ...data[idx] });
     onOpen();
   };
 
@@ -68,15 +80,15 @@ export default function PatientDisplayTable() {
     data.forEach((current, idx) => {
       // console.log(idx, current.firstName);
       patientsToRender.push(
-        <Tr key={idx}>
+        <Tr key={idx} id={current._id}>
           <Td>{activeFields["First Name"] ? current.firstName : null}</Td>
           <Td>{activeFields["Middle Name"] ? current.middleName : null}</Td>
           <Td>{activeFields["Last Name"] ? current.lastName : null}</Td>
           <Td>{activeFields["Date of birth"] ? current.DOB : null}</Td>
           <Td>
             {activeFields["Status"] ? (
-              <StatusField currentStatus={current.status}>
-                current.status
+              <StatusField currentStatus={current.status} id={current._id}>
+                {current.status}
               </StatusField>
             ) : null}
           </Td>
@@ -103,12 +115,18 @@ export default function PatientDisplayTable() {
       ) {
         patientsToRender.push(
           <Fragment>
-            <Tr key={idx}>
+            <Tr key={idx} id={current._id}>
               <Td>{activeFields["First Name"] ? current.firstName : null}</Td>
               <Td>{activeFields["Middle Name"] ? current.middleName : null}</Td>
               <Td>{activeFields["Last Name"] ? current.lastName : null}</Td>
               <Td>{activeFields["Date of birth"] ? current.DOB : null}</Td>
-              <Td>{activeFields["Status"] ? current.status : null}</Td>
+              <Td>
+                {activeFields["Status"] ? (
+                  <StatusField currentStatus={current.status} id={current._id}>
+                    {current.status}
+                  </StatusField>
+                ) : null}
+              </Td>
               <Td>
                 {activeFields["Address"]
                   ? `${current.city}, ${current.state}`

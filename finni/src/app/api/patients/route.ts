@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { type NextRequest, NextResponse } from "next/server";
 import Patient from "~/app/(models)/patient";
-import mongoose from "mongoose";
 import { dbConnect, dbDisconnect } from "~/(utils)/connect";
 
 export async function POST(
@@ -60,6 +59,26 @@ export async function POST(
       });
     }
   }
+  if (data.type === 'UPDATE-PatientStatus') {
+    try {
+      const {id, statusUpdate} = data
+  
+      const filter = {_id: id}
+      const value = {status: statusUpdate}
+  
+      const updateStatus = await Patient.findOneAndUpdate(filter, value)
+      await dbDisconnect();
+      return NextResponse.json({
+        message: `Status successfully updated to ${statusUpdate}`,
+        data: updateStatus
+      })
+    } catch (error) {
+      return NextResponse.json({
+        message: "Failed to update patient",
+        details: error?.message
+      })
+    }
+  }
 }
 
 export async function DELETE(req: NextRequest): Promise<void | NextResponse<unknown>> {
@@ -70,8 +89,32 @@ export async function DELETE(req: NextRequest): Promise<void | NextResponse<unkn
   } catch (error) {
     return NextResponse.json({
       message: "Failed to delete patient",
-      details: error.message,
+      details: error?.message,
     });
   }
 }
 
+export async function UPDATE(req:NextRequest): Promise<void | NextResponse<unknown>> {
+  // fitler by id stored in mongodb
+  await dbConnect('UPDATE') 
+  const data = await req.json()
+
+  try {
+    const {id, statusUpdate} = data
+
+    const filter = {_id: id}
+    const value = {status: statusUpdate}
+
+    const updateStatus = await Patient.findOneAndUpdate(id, statusUpdate)
+    await dbDisconnect();
+    return NextResponse.json({
+      message: `Status successfully updated to ${statusUpdate}`,
+      data: updateStatus
+    })
+  } catch (error) {
+    return NextResponse.json({
+      message: "Failed to update patient",
+      details: error?.message
+    })
+  }
+}

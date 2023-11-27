@@ -47,3 +47,15 @@ export async function createNewPatient(
 
   return response
 }
+
+export async function updateField(id: string, statusUpdate: string) {
+  const response = await fetch('/api/patients',{
+    method: 'POST',
+    headers: {
+      "Content-Type": 'application/json'
+    },
+    body: JSON.stringify({type: 'UPDATE-PatientStatus',id, statusUpdate})
+  })
+
+  return response.json()
+}

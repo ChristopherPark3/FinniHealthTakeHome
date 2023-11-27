@@ -1,4 +1,5 @@
 export type NewPatientInterface = {
+  id: number;
   firstName: string;
   middleName?: string;
   lastName: string;

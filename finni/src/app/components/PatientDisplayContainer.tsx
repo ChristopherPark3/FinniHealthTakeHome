@@ -2,6 +2,7 @@
 import { createContext, useContext, useState } from "react";
 import PatientDisplayNavbar from "./PatientDisplayNavbar";
 import PatientDisplayTable from "./PatientDisplayTable";
+import DenseTable from "./TestTable";
 
 // Initializing a new context for active fields bc each individual checkbox to handle any change is nested
 export const ActiveFieldsContext = createContext({
