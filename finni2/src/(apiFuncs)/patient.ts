@@ -1,6 +1,7 @@
 // Purpose of this is strictly to get all patients in the database
 
 import { type NewPatientInterface } from "~/(types)/types";
+export const dynamic = 'force-dynamic'
 
 export async function getPatients() {
   const response = await fetch("/api/patients", {
